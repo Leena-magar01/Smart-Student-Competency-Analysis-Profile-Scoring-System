@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Upload Helper - SENTINEL</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at top, #020617, #000);
+            color: white;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #6366f1, #22d3ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .card {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        h2 {
+            color: #22d3ee;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .error-box {
+            background: rgba(239, 68, 68, 0.15);
+            border-left: 4px solid #ef4444;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        
+        .success-box {
+            background: rgba(34, 197, 94, 0.15);
+            border-left: 4px solid #22c55e;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        
+        .csv-example {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(99, 102, 241, 0.5);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+        
+        .csv-example.minimal {
+            background: rgba(34, 197, 94, 0.1);
+            border-color: rgba(34, 197, 94, 0.5);
+        }
+        
+        .csv-example.complete {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: rgba(99, 102, 241, 0.5);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        th {
+            background: rgba(99, 102, 241, 0.2);
+            color: #a78bfa;
+        }
+        
+        ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .step {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .step-number {
+            background: linear-gradient(135deg, #6366f1, #22d3ee);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        a {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #6366f1, #22d3ee);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+        }
+        
+        .secondary {
+            background: rgba(99, 102, 241, 0.2);
+            border: 1px solid rgba(99, 102, 241, 0.5);
+        }
+        
+        code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #a78bfa;
+        }
+        
+        .warning {
+            background: rgba(245, 158, 11, 0.15);
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>📊 CSV Upload Helper - SENTINEL System</h1>
+    
+    <!-- Error Info -->
+    <div class="card">
+        <h2>❌ Error: "CSV file must contain at least a header row and one data row"</h2>
+        <p style="margin-bottom: 15px;">This error means your CSV file is missing data rows. Here are common causes:</p>
+        <ul>
+            <li><strong>Only header row, no data:</strong> CSV must have at least 1 header + 1 data row</li>
+            <li><strong>Extra blank lines:</strong> Remove all blank/empty rows from your file</li>
+            <li><strong>Incorrect format:</strong> Make sure columns are separated by commas</li>
+        </ul>
+    </div>
+    
+    <!-- Minimum Format -->
+    <div class="card">
+        <h2>✅ Minimum Valid Format (3 columns)</h2>
+        <p style="margin-bottom: 15px;">This is the SMALLEST CSV that will work:</p>
+        <div class="csv-example minimal">
+Name,Department,Attendance<br>
+Aman Kumar,Computer Science,95<br>
+Riya Singh,Mathematics,45
+        </div>
+        <p style="color: #22c55e;">✓ This will work! Only 3 required columns (columns can be in any order).</p>
+    </div>
+    
+    <!-- Complete Format -->
+    <div class="card">
+        <h2>📋 Complete Format (7 columns - with ID)</h2>
+        <p style="margin-bottom: 15px;">For rich student data with ID tracking, use all available columns:</p>
+        <div class="csv-example complete">
+ID,Name,Department,Attendance,City,Semester,Grade<br>
+1,Aman Kumar,Computer Science,95,Delhi,6th,A+<br>
+2,Riya Singh,Mathematics,45,Mumbai,4th,C<br>
+3,Rahul Sharma,Physics,70,Bangalore,5th,B
+        </div>
+        <p style="color: #a78bfa;">💡 Column order doesn't matter! System automatically detects columns by their names.</p>
+    </div>
+    
+    <!-- Column Reference -->
+    <div class="card">
+        <h2>📌 Column Reference</h2>
+        <table>
+            <tr>
+                <th>Column Name</th>
+                <th>Required</th>
+                <th>Format</th>
+                <th>Example</th>
+            </tr>
+            <tr>
+                <td>ID</td>
+                <td>Optional</td>
+                <td>Any text/number</td>
+                <td>1 or STU001</td>
+            </tr>
+            <tr>
+                <td>Name</td>
+                <td>✓ YES</td>
+                <td>Any text</td>
+                <td>Aman Kumar</td>
+            </tr>
+            <tr>
+                <td>Department</td>
+                <td>✓ YES</td>
+                <td>Any text</td>
+                <td>Computer Science</td>
+            </tr>
+            <tr>
+                <td>Attendance</td>
+                <td>✓ YES</td>
+                <td>Number or Number%</td>
+                <td>95 or 95%</td>
+            </tr>
+            <tr>
+                <td>City</td>
+                <td>Optional</td>
+                <td>Any text</td>
+                <td>Delhi</td>
+            </tr>
+            <tr>
+                <td>Semester</td>
+                <td>Optional</td>
+                <td>Any text</td>
+                <td>6th</td>
+            </tr>
+            <tr>
+                <td>Grade</td>
+                <td>Optional</td>
+                <td>Any text</td>
+                <td>A+</td>
+            </tr>
+        </table>
+    </div>
+    
+    <!-- Upload Steps -->
+    <div class="card">
+        <h2>🚀 Upload Steps</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <strong>Create CSV</strong>
+                <p style="font-size: 13px; margin-top: 5px;">Prepare your CSV file with header + data rows</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <strong>Check Format</strong>
+                <p style="font-size: 13px; margin-top: 5px;">Verify it has at least 1 data row (not just header)</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <strong>Remove Blank Lines</strong>
+                <p style="font-size: 13px; margin-top: 5px;">Delete any empty rows at the end</p>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <strong>Upload</strong>
+                <p style="font-size: 13px; margin-top: 5px;">Click the upload area in Admin Dashboard</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Debugging Tips -->
+    <div class="card">
+        <h2>🐛 Debugging Tips</h2>
+        <p style="margin-bottom: 15px;">If you still get an error, try these:</p>
+        <ul>
+            <li><strong>Count rows:</strong> Should be 1 header + at least 1 data row = minimum 2 lines</li>
+            <li><strong>Check commas:</strong> Each row must have commas between values</li>
+            <li><strong>View in text editor:</strong> Open with Notepad to check for hidden characters</li>
+            <li><strong>Open browser console:</strong> Press F12 to see detailed error messages</li>
+            <li><strong>Use sample files:</strong> Provided sample_data.csv or sample_minimal.csv</li>
+        </ul>
+    </div>
+    
+    <!-- Sample Files -->
+    <div class="card">
+        <h2>📂 Download Sample Files</h2>
+        <p style="margin-bottom: 20px;">Use these pre-made CSV files as a template:</p>
+        <div class="button-group">
+            <a href="/sample_minimal.csv" download>📄 Download Minimal CSV (3 columns + ID)</a>
+            <a href="/sample_data.csv" download>📊 Download Complete CSV (7 columns + ID)</a>
+            <a href="/admin_dashboard.html" class="secondary">📈 Go to Upload Page</a>
+        </div>
+    </div>
+    
+    <!-- FAQ -->
+    <div class="card">
+        <h2>❓ FAQ</h2>
+        <p><strong>Q: Can I have only 3 columns?</strong></p>
+        <p style="margin-bottom: 15px;">A: <span style="color: #22c55e;">✓ YES!</span> You only need Name, Department, and Attendance. Other columns are optional.</p>
+        
+        <p><strong>Q: Can I add an ID column?</strong></p>
+        <p style="margin-bottom: 15px;">A: <span style="color: #22c55e;">✓ YES!</span> Add an ID column anywhere. System automatically detects it: <code>ID,Name,Department,Attendance,City,Semester,Grade</code></p>
+        
+        <p><strong>Q: Do the columns have to be in a specific order?</strong></p>
+        <p style="margin-bottom: 15px;">A: <span style="color: #22c55e;">✓ NO!</span> Column order doesn't matter. System automatically finds columns by their header names.<br>
+        Example: <code>Department,Attendance,Name,City</code> works just as well as <code>Name,Department,Attendance,City</code></p>
+        
+        <p><strong>Q: What if my attendance has a % symbol?</strong></p>
+        <p style="margin-bottom: 15px;">A: <span style="color: #22c55e;">✓ Both work!</span> You can use "95" or "95%" - system handles both.</p>
+        
+        <p><strong>Q: Can I have spaces in column names?</strong></p>
+        <p style="margin-bottom: 15px;">A: <span style="color: #22c55e;">✓ YES!</span> "Computer Science" is perfectly fine.</p>
+        
+        <p><strong>Q: How many students can I upload?</strong></p>
+        <p style="margin-bottom: 15px;">A: <span style="color: #22c55e;">Unlimited!</span> System handles any number of rows.</p>
+    </div>
+    
+    <!-- Warning -->
+    <div class="warning">
+        <strong>⚠️ Important:</strong> Make sure your CSV file has NO blank rows at all. If your text editor shows row numbers, the last data row should immediately precede the end of file. Column order and extra columns don't matter - system automatically detects Name, Department, and Attendance columns.
+    </div>
+    
+    <!-- Back Button -->
+    <div style="text-align: center; margin-top: 40px;">
+        <a href="/admin_dashboard.html">← Back to Admin Dashboard</a>
+    </div>
+</div>
+
+</body>
+</html>

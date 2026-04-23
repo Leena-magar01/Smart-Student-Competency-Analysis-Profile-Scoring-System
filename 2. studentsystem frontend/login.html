@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - SENTINEL</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+/* ===== GLOBAL ===== */
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: radial-gradient(circle at top, #020617, #000);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* ===== CARD ===== */
+.container {
+    width: 420px;
+    background: rgba(15,23,42,0.85);
+    padding: 40px;
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+p {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 14px;
+    margin-bottom: 25px;
+}
+
+/* ===== ROLES ===== */
+.role-select {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.role {
+    flex: 1;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    background: rgba(255,255,255,0.05);
+    transition: 0.3s;
+    border: 2px solid transparent;
+}
+
+.role:hover {
+    background: rgba(99,102,241,0.3);
+}
+
+.role.active {
+    background: linear-gradient(135deg,#6366f1,#22d3ee);
+    border-color: #22d3ee;
+}
+
+/* ===== INPUTS ===== */
+.input-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    font-size: 13px;
+    color: #cbd5f5;
+    margin-bottom: 8px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(255,255,255,0.05);
+    color: white;
+    outline: none;
+    transition: 0.3s;
+}
+
+input::placeholder {
+    color: #64748b;
+}
+
+input:focus {
+    background: rgba(255,255,255,0.1);
+    box-shadow: 0 0 0 2px rgba(99,102,241,0.3);
+}
+
+/* ===== VERIFICATION CODE ===== */
+#verificationGroup {
+    display: none;
+}
+
+#verificationGroup.show {
+    display: block;
+}
+
+/* ===== BUTTON ===== */
+button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg,#6366f1,#22d3ee);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
+}
+
+button:hover {
+    transform: scale(1.02);
+}
+
+/* ===== FOOTER ===== */
+.footer {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+.footer a {
+    color: #22d3ee;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>🚀 Welcome Back</h2>
+<p>Choose your role and sign in to continue</p>
+
+<!-- ROLE SELECT -->
+<div class="role-select">
+    <div class="role active" onclick="selectRole(this,'Teacher')">👨‍🏫 Teacher</div>
+    <div class="role" onclick="selectRole(this,'Student')">🎓 Student</div>
+    <div class="role" onclick="selectRole(this,'Parent')">👪 Parent</div>
+</div>
+
+<!-- EMAIL -->
+<div class="input-group">
+    <label for="email">Email Address</label>
+    <input type="email" id="email" placeholder="Enter your email">
+</div>
+
+<!-- PASSWORD -->
+<div class="input-group">
+    <label for="password">Password</label>
+    <input type="password" id="password" placeholder="Enter your password">
+</div>
+
+<!-- STUDENT ID (ONLY FOR STUDENT & PARENT) -->
+<div class="input-group" id="studentIdGroup">
+    <label for="studentId">Student ID</label>
+    <input type="text" id="studentId" placeholder="Enter your Student ID (e.g., STU001)">
+</div>
+
+<!-- 6 DIGIT VERIFICATION (ONLY FOR STUDENT & PARENT) -->
+<div class="input-group" id="verificationGroup">
+    <label for="verificationCode">6-Digit Verification Code</label>
+    <input type="number" id="verificationCode" placeholder="Enter verification code" maxlength="6" min="0" max="999999">
+</div>
+
+<!-- LOGIN BUTTON -->
+<button onclick="login()">Sign In as Teacher</button>
+
+<div class="footer">
+    Don't have an account? <a href="createnewaccount.html">Create Account</a>
+</div>
+
+</div>
+
+<script>
+
+let selectedRole = "Teacher";
+
+// SELECT ROLE
+function selectRole(element, role) {
+    document.querySelectorAll(".role").forEach(r => r.classList.remove("active"));
+    element.classList.add("active");
+    selectedRole = role;
+    document.querySelector("button").innerText = "Sign In as " + role;
+    
+    // Show student ID and verification code field only for Student and Parent
+    const studentIdGroup = document.getElementById("studentIdGroup");
+    const verificationGroup = document.getElementById("verificationGroup");
+    if(role === "Student" || role === "Parent"){
+        studentIdGroup.classList.add("show");
+        verificationGroup.classList.add("show");
+    } else {
+        studentIdGroup.classList.remove("show");
+        verificationGroup.classList.remove("show");
+    }
+}
+
+// LOGIN FUNCTION
+function login() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const studentId = document.getElementById("studentId").value;
+    const verificationCode = document.getElementById("verificationCode").value;
+
+    if (!email || !password) {
+        alert("Please fill in all fields!");
+        return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        alert("Please enter a valid email address!");
+        return;
+    }
+
+    // VALIDATE STUDENT ID AND 6-DIGIT CODE ONLY FOR STUDENT AND PARENT
+    if(selectedRole === "Student" || selectedRole === "Parent"){
+        if(!studentId){
+            alert("Please enter your Student ID!");
+            return;
+        }
+        if(!verificationCode){
+            alert("Please enter your 6-digit verification code!");
+            return;
+        }
+        if(verificationCode.length !== 6 || isNaN(verificationCode)){
+            alert("Verification code must be exactly 6 digits!");
+            return;
+        }
+
+        // VERIFY STUDENT ID, EMAIL, AND CODE AGAINST STORED ACCOUNT DATA
+        const storedUser = JSON.parse(localStorage.getItem("user"));
+        
+        if(!storedUser || storedUser.email !== email || storedUser.role !== selectedRole){
+            alert("Account not found! Please create an account first.");
+            return;
+        }
+
+        if(storedUser.studentId !== studentId){
+            alert("❌ Student ID is incorrect! Please try again.");
+            return;
+        }
+
+        if(storedUser.verificationCode !== verificationCode){
+            alert("❌ Verification code is incorrect! Please try again.");
+            return;
+        }
+    }
+
+    // Store authentication in sessionStorage
+    alert("Logging in as " + selectedRole + " 🎉");
+
+    sessionStorage.setItem('authenticated', 'true');
+    sessionStorage.setItem('userRole', selectedRole);
+    sessionStorage.setItem('loginTime', new Date().toISOString());
+    sessionStorage.setItem('email', email);
+    
+    // Store student ID if logged in as Student or Parent
+    if(selectedRole === "Student" || selectedRole === "Parent"){
+        sessionStorage.setItem('studentId', studentId);
+    }
+
+    // REDIRECT BASED ON ROLE
+    if (selectedRole === "Teacher") {
+        window.location.href = "admin_dashboard.html";
+    } else if (selectedRole === "Student") {
+        window.location.href = "st_home.html";
+    } else if (selectedRole === "Parent") {
+        window.location.href = "parent_dashboard.html";
+    }
+}
+
+// Allow Enter key to login
+document.getElementById("password").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        login();
+    }
+});
+
+</script>
+
+</body>
+</html>
