@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Learning Hub</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ===== GLOBAL ===== */
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #020617, #0f172a);
+    color: white;
+    min-height: 100vh;
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 60px;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar h3 {
+    font-size: 24px;
+    background: linear-gradient(90deg, #60a5fa, #22d3ee);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+}
+
+.nav-links {
+    display: flex;
+    gap: 30px;
+}
+
+.nav-links a {
+    color: #94a3b8;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    display: inline-block;
+}
+
+.nav-links a:hover {
+    color: #00d9ff;
+    background: rgba(0, 217, 255, 0.2);
+    border: 1px solid rgba(0, 217, 255, 0.5);
+    box-shadow: 0 0 15px rgba(0, 217, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.nav-links .active {
+    color: #00d9ff;
+    background: rgba(0, 217, 255, 0.25);
+    border: 1px solid rgba(0, 217, 255, 0.6);
+    box-shadow: 0 0 15px rgba(0, 217, 255, 0.2);
+}
+
+.container {
+    padding: 40px 60px;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+/* ===== HEADER & CONTROLS ===== */
+.page-header {
+    margin-bottom: 40px;
+}
+
+h2 {
+    font-size: 36px;
+    margin-bottom: 10px;
+    background: linear-gradient(90deg, #6366f1, #22d3ee);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+    margin-top: 0;
+}
+
+.subtext {
+    color: #94a3b8;
+    margin-bottom: 30px;
+    font-size: 16px;
+}
+
+.controls-bar {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    background: rgba(15, 23, 42, 0.6);
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.controls-bar input, .controls-bar select {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    flex: 1;
+    min-width: 200px;
+    transition: all 0.3s;
+}
+
+.controls-bar input:focus, .controls-bar select:focus {
+    border-color: #22d3ee;
+    box-shadow: 0 0 10px rgba(34, 211, 238, 0.2);
+}
+
+.controls-bar option {
+    background: #0f172a;
+    color: white;
+}
+
+.btn-ai {
+    background: linear-gradient(135deg, #7c3aed, #db2777);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+}
+
+.btn-ai:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(219, 39, 119, 0.4);
+}
+
+/* ===== GRID ===== */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 28px;
+}
+
+/* ===== COURSE CARD ===== */
+.course-card {
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(10px);
+    padding: 28px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.course-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--category-color, linear-gradient(90deg, #7c3aed, #22d3ee));
+}
+
+.course-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(255, 255, 255, 0.15);
+    background: rgba(15, 23, 42, 0.9);
+    box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 15px;
+}
+
+.tag {
+    background: var(--tag-bg, rgba(124, 58, 237, 0.2));
+    color: var(--tag-color, #c4b5fd);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid var(--tag-border, rgba(124, 58, 237, 0.4));
+}
+
+.difficulty {
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #cbd5e1;
+}
+
+.course-card h3 {
+    margin: 0 0 12px 0;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.4;
+    flex-grow: 1;
+}
+
+.course-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 13px;
+    color: #cbd5e1;
+}
+
+.provider {
+    color: #94a3b8;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.course-btn {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(34, 211, 238, 0.2));
+    border: 1px solid rgba(99, 102, 241, 0.4);
+    border-radius: 10px;
+    color: #a78bfa;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 13px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: auto;
+}
+
+.course-card:hover .course-btn {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.5), rgba(34, 211, 238, 0.4));
+    border-color: rgba(99, 102, 241, 0.7);
+    color: #fff;
+}
+
+/* ===== MODALS ===== */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(2, 6, 23, 0.85);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.modal-content {
+    background: #0f172a;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 40px;
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.modal-overlay.active .modal-content {
+    transform: translateY(0);
+}
+
+.modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: white;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.modal-close:hover { background: rgba(239, 68, 68, 0.8); }
+
+.modal-tag { display: inline-block; margin-bottom: 15px; }
+.modal-title { font-size: 28px; margin-bottom: 15px; font-weight: 700; }
+.modal-desc { color: #94a3b8; line-height: 1.6; margin-bottom: 30px; }
+.modal-meta { display: flex; gap: 20px; color: #cbd5e1; font-size: 14px; margin-bottom: 30px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 10px;}
+
+.modal-link {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 16px;
+    background: linear-gradient(90deg, #6366f1, #22d3ee);
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 16px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.modal-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(34, 211, 238, 0.3);
+}
+
+/* AI Recommendation Styles */
+.ai-input-wrapper { display: flex; flex-direction: column; gap: 15px; }
+.ai-input-wrapper textarea {
+    width: 100%;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 15px;
+    color: white;
+    font-family: inherit;
+    resize: none;
+    height: 100px;
+    outline: none;
+}
+.ai-input-wrapper textarea:focus { border-color: #db2777; }
+.ai-loading { display: none; color: #db2777; font-weight: 600; text-align: center; margin-top: 15px;}
+
+/* ===== CATEGORY COLORS ===== */
+.course-card[data-category="CS"] { --category-color: linear-gradient(90deg, #10b981, #059669); --tag-bg: rgba(16, 185, 129, 0.2); --tag-color: #d1fae5; --tag-border: rgba(16, 185, 129, 0.4); }
+.course-card[data-category="Mechanical"] { --category-color: linear-gradient(90deg, #ef4444, #dc2626); --tag-bg: rgba(239, 68, 68, 0.2); --tag-color: #fecaca; --tag-border: rgba(239, 68, 68, 0.4); }
+.course-card[data-category="Electrical"] { --category-color: linear-gradient(90deg, #f97316, #ea580c); --tag-bg: rgba(249, 115, 22, 0.2); --tag-color: #ffedd5; --tag-border: rgba(249, 115, 22, 0.4); }
+.course-card[data-category="Electronics"] { --category-color: linear-gradient(90deg, #84cc16, #65a30d); --tag-bg: rgba(132, 204, 22, 0.2); --tag-color: #e4ff00; --tag-border: rgba(132, 204, 22, 0.4); }
+.course-card[data-category="Civil"] { --category-color: linear-gradient(90deg, #8b5cf6, #7c3aed); --tag-bg: rgba(139, 92, 246, 0.2); --tag-color: #ede9fe; --tag-border: rgba(139, 92, 246, 0.4); }
+.course-card[data-category="AI"] { --category-color: linear-gradient(90deg, #06b6d4, #0284c7); --tag-bg: rgba(6, 182, 212, 0.2); --tag-color: #cffafe; --tag-border: rgba(6, 182, 212, 0.4); }
+.course-card[data-category="Robotics"] { --category-color: linear-gradient(90deg, #ec4899, #db2777); --tag-bg: rgba(236, 72, 153, 0.2); --tag-color: #fbcfe8; --tag-border: rgba(236, 72, 153, 0.4); }
+.course-card[data-category="Software"] { --category-color: linear-gradient(90deg, #3b82f6, #2563eb); --tag-bg: rgba(59, 130, 246, 0.2); --tag-color: #dbeafe; --tag-border: rgba(59, 130, 246, 0.4); }
+.course-card[data-category="Cloud"] { --category-color: linear-gradient(90deg, #6366f1, #4f46e5); --tag-bg: rgba(99, 102, 241, 0.2); --tag-color: #e0e7ff; --tag-border: rgba(99, 102, 241, 0.4); }
+.course-card[data-category="Aerospace"] { --category-color: linear-gradient(90deg, #0ea5e9, #0284c7); --tag-bg: rgba(14, 165, 233, 0.2); --tag-color: #e0f2fe; --tag-border: rgba(14, 165, 233, 0.4); }
+.course-card[data-category="Cybersecurity"] { --category-color: linear-gradient(90deg, #14b8a6, #0d9488); --tag-bg: rgba(20, 184, 166, 0.2); --tag-color: #ccfbf1; --tag-border: rgba(20, 184, 166, 0.4); }
+.course-card[data-category="Chemical"] { --category-color: linear-gradient(90deg, #f59e0b, #d97706); --tag-bg: rgba(245, 158, 11, 0.2); --tag-color: #fef3c7; --tag-border: rgba(245, 158, 11, 0.4); }
+
+.no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px;
+    color: #94a3b8;
+    font-size: 18px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .navbar { flex-direction: column; gap: 15px; padding: 20px; }
+    .container { padding: 30px 20px; }
+    .nav-links { flex-wrap: wrap; justify-content: center; gap: 10px; }
+    .controls-bar { flex-direction: column; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <h3>🎓 Student Dashboard</h3>
+    <div class="nav-links">
+        <a href="/st_home.html">Dashboard</a>
+        <a href="/acadmics.html">Academics</a>
+        <a href="/ai_tutor.html">AI Tutor</a>
+        <a href="/learn_hub.html" class="active">Learning Hub</a>
+        <a href="/carier_guide.html">Career</a>
+    </div>
+</div>
+
+<div class="container">
+    <div class="page-header">
+        <h2>📚 Engineering Learning Hub</h2>
+        <p class="subtext">Master advanced engineering concepts with over 100+ top-tier courses.</p>
+        
+        <div class="controls-bar">
+            <input type="text" id="searchInput" placeholder="🔍 Search by course title, topic, or provider...">
+            <select id="branchFilter">
+                <option value="All">All Branches</option>
+                <option value="CS">Computer Science</option>
+                <option value="AI">Artificial Intelligence</option>
+                <option value="Software">Software Engineering</option>
+                <option value="Cloud">Cloud Computing</option>
+                <option value="Cybersecurity">Cybersecurity</option>
+                <option value="Mechanical">Mechanical</option>
+                <option value="Electrical">Electrical</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Civil">Civil</option>
+                <option value="Robotics">Robotics</option>
+                <option value="Aerospace">Aerospace</option>
+                <option value="Chemical">Chemical</option>
+            </select>
+            <button class="btn-ai" id="aiBtn">✨ AI Recommendations</button>
+        </div>
+    </div>
+
+    <div class="grid" id="courseGrid">
+        <!-- Courses injected dynamically here -->
+    </div>
+</div>
+
+<!-- COURSE PREVIEW MODAL -->
+<div class="modal-overlay" id="previewModal">
+    <div class="modal-content">
+        <button class="modal-close" onclick="closeModal('previewModal')">✕</button>
+        <span class="tag modal-tag" id="modalTag">CS</span>
+        <h2 class="modal-title" id="modalTitle">Course Title</h2>
+        <div class="modal-meta">
+            <span id="modalProvider">🏫 Provider</span>
+            <span id="modalDifficulty">📊 Difficulty</span>
+        </div>
+        <p class="modal-desc" id="modalDesc">Course description goes here.</p>
+        <a href="#" target="_blank" class="modal-link" id="modalLink">Start Course Now ↗</a>
+    </div>
+</div>
+
+<!-- AI RECOMMENDATION MODAL -->
+<div class="modal-overlay" id="aiModal">
+    <div class="modal-content">
+        <button class="modal-close" onclick="closeModal('aiModal')">✕</button>
+        <h2 class="modal-title" style="color: #db2777;">✨ AI Course Advisor</h2>
+        <p class="modal-desc">Tell me what you want to achieve, build, or learn about, and I'll find the perfect courses for you.</p>
+        
+        <div class="ai-input-wrapper">
+            <textarea id="aiPrompt" placeholder="E.g., I want to learn how to build secure cloud applications and understand machine learning basics..."></textarea>
+            <button class="modal-link" style="background: linear-gradient(90deg, #db2777, #9333ea);" onclick="processAI()">Get Recommendations</button>
+        </div>
+        <div class="ai-loading" id="aiLoading">Analyzing your profile & scanning 100+ courses...</div>
+    </div>
+</div>
+
+<script>
+// --- 100+ COURSE DATABASE ---
+const courses = [
+    // --- Computer Science & Software (20) ---
+    { id: 1, title: "Responsive Web Design", category: "CS", difficulty: "Beginner", provider: "freeCodeCamp", link: "https://www.freecodecamp.org/learn/responsive-web-design/", desc: "Learn HTML, CSS, and modern responsive design by building real projects." },
+    { id: 2, title: "Data Structures & Algorithms", category: "CS", difficulty: "Advanced", provider: "UC San Diego", link: "https://www.coursera.org/specializations/data-structures-algorithms", desc: "Master algorithmic programming techniques, trees, graphs, and advanced data structures." },
+    { id: 3, title: "CS50: Introduction to Computer Science", category: "CS", difficulty: "Beginner", provider: "HarvardX", link: "https://www.edx.org/course/introduction-computer-science-harvardx-cs50x", desc: "Harvard's legendary introduction to the intellectual enterprises of computer science." },
+    { id: 4, title: "Full Stack Open", category: "Software", difficulty: "Advanced", provider: "Univ of Helsinki", link: "https://fullstackopen.com/en/", desc: "Deep dive into modern React, Redux, Node.js, MongoDB, GraphQL and TypeScript." },
+    { id: 5, title: "Operating Systems and You", category: "CS", difficulty: "Intermediate", provider: "Google", link: "https://www.coursera.org/learn/os-power-user", desc: "Learn about the main components of an operating system and how to perform critical tasks." },
+    { id: 6, title: "Introduction to Databases", category: "Software", difficulty: "Intermediate", provider: "Stanford", link: "https://online.stanford.edu/courses/soe-ydatabases-databases", desc: "Comprehensive coverage of relational databases, SQL, and database design." },
+    { id: 7, title: "Software Design and Architecture", category: "Software", difficulty: "Advanced", provider: "Univ of Alberta", link: "https://www.coursera.org/specializations/software-design-architecture", desc: "Learn object-oriented design principles, patterns, and software architecture." },
+    { id: 8, title: "Functional Programming in Scala", category: "Software", difficulty: "Advanced", provider: "EPFL", link: "https://www.coursera.org/specializations/scala", desc: "Discover functional programming concepts through the Scala language." },
+    { id: 9, title: "Agile Software Development", category: "Software", difficulty: "Intermediate", provider: "Univ of Minnesota", link: "https://www.coursera.org/learn/agile-software-development", desc: "Understand Agile practices, Scrum, and Kanban methodologies." },
+    { id: 10, title: "Automata Theory", category: "CS", difficulty: "Advanced", provider: "Stanford", link: "https://online.stanford.edu/courses/soe-ycsautomata-automata-theory", desc: "Study of abstract machines and automata, and the problems they can solve." },
+    { id: 11, title: "Cryptography I", category: "CS", difficulty: "Intermediate", provider: "Stanford", link: "https://www.coursera.org/learn/crypto", desc: "Learn the inner workings of cryptographic systems and how to correctly use them in applications." },
+    { id: 12, title: "Build an Operating System from Scratch", category: "CS", difficulty: "Advanced", provider: "Udemy", link: "#", desc: "Hands-on guide to building a simple OS to understand kernel internals." },
+    { id: 13, title: "Computer Architecture", category: "CS", difficulty: "Advanced", provider: "Princeton", link: "https://www.coursera.org/learn/comparch", desc: "Learn to design the computer architecture of complex modern microprocessors." },
+    { id: 14, title: "Rust Programming Language", category: "Software", difficulty: "Intermediate", provider: "Rust Lang", link: "https://doc.rust-lang.org/book/", desc: "Read the official book to learn memory-safe systems programming." },
+    { id: 15, title: "Go (Golang) Microservices", category: "Software", difficulty: "Advanced", provider: "freeCodeCamp", link: "#", desc: "Build scalable backend microservices using the Go programming language." },
+    { id: 16, title: "System Design Interview Prep", category: "Software", difficulty: "Advanced", provider: "ByteByteGo", link: "#", desc: "Master the art of designing scalable, distributed, and highly available systems." },
+    { id: 17, title: "Linux Command Line Basics", category: "CS", difficulty: "Beginner", provider: "Udacity", link: "#", desc: "Navigate the Linux terminal and bash scripting essentials." },
+    { id: 18, title: "Advanced CSS and Sass", category: "Software", difficulty: "Intermediate", provider: "Udemy", link: "#", desc: "Flexbox, Grid, animations and more advanced UI techniques." },
+    { id: 19, title: "Python for Everybody", category: "CS", difficulty: "Beginner", provider: "Univ of Michigan", link: "https://www.coursera.org/specializations/python", desc: "Learn to program and analyze data with Python." },
+    { id: 20, title: "C++ Nanodegree", category: "Software", difficulty: "Advanced", provider: "Udacity", link: "#", desc: "Become a C++ developer by coding high-performance applications." },
+
+    // --- AI, ML & Data Science (15) ---
+    { id: 21, title: "Machine Learning Specialization", category: "AI", difficulty: "Intermediate", provider: "Stanford", link: "https://www.coursera.org/specializations/machine-learning-introduction", desc: "Foundational ML algorithms, supervised/unsupervised learning, and best practices." },
+    { id: 22, title: "Deep Learning Specialization", category: "AI", difficulty: "Advanced", provider: "deeplearning.ai", link: "https://www.coursera.org/specializations/deep-learning", desc: "Neural networks, CNNs, RNNs, and how to build successful machine learning projects." },
+    { id: 23, title: "Natural Language Processing", category: "AI", difficulty: "Advanced", provider: "Hugging Face", link: "https://huggingface.co/course", desc: "Learn NLP techniques using Transformers, PyTorch, and TensorFlow." },
+    { id: 24, title: "Computer Vision Fundamentals", category: "AI", difficulty: "Advanced", provider: "Univ at Buffalo", link: "#", desc: "Image processing, feature extraction, and modern CNN-based vision systems." },
+    { id: 25, title: "Reinforcement Learning", category: "AI", difficulty: "Advanced", provider: "Univ of Alberta", link: "https://www.coursera.org/specializations/reinforcement-learning", desc: "Learn RL foundations, Markov Decision Processes, and Q-learning." },
+    { id: 26, title: "Generative AI for Everyone", category: "AI", difficulty: "Beginner", provider: "deeplearning.ai", link: "#", desc: "Understand LLMs, prompt engineering, and the future of Generative AI." },
+    { id: 27, title: "Data Science Micro-Courses", category: "CS", difficulty: "Intermediate", provider: "Kaggle", link: "https://www.kaggle.com/learn", desc: "Short, practical courses on Pandas, data visualization, and feature engineering." },
+    { id: 28, title: "Mathematics for Machine Learning", category: "AI", difficulty: "Intermediate", provider: "Imperial College", link: "https://www.coursera.org/specializations/mathematics-machine-learning", desc: "Linear algebra, multivariate calculus, and PCA for AI." },
+    { id: 29, title: "AI Ethics", category: "AI", difficulty: "Intermediate", provider: "Univ of Edinburgh", link: "#", desc: "Explore the moral and social implications of autonomous systems." },
+    { id: 30, title: "TensorFlow Developer Certificate", category: "AI", difficulty: "Intermediate", provider: "Google", link: "#", desc: "Hands-on training building ML models in TensorFlow." },
+    { id: 31, title: "PyTorch for Deep Learning", category: "AI", difficulty: "Intermediate", provider: "freeCodeCamp", link: "#", desc: "Complete tutorial on deep learning using the PyTorch framework." },
+    { id: 32, title: "Applied Data Science with Python", category: "CS", difficulty: "Intermediate", provider: "Univ of Michigan", link: "#", desc: "Text analysis, machine learning, and social network analysis in Python." },
+    { id: 33, title: "Autonomous Cars Specialization", category: "AI", difficulty: "Advanced", provider: "Univ of Toronto", link: "#", desc: "State estimation, perception, and motion planning for self-driving cars." },
+    { id: 34, title: "Introduction to AI", category: "AI", difficulty: "Beginner", provider: "IBM", link: "#", desc: "Basic concepts of AI, ML, Deep Learning, and their use cases." },
+    { id: 35, title: "Big Data Specialization", category: "CS", difficulty: "Intermediate", provider: "UC San Diego", link: "#", desc: "Hadoop, MapReduce, Spark, and big data management." },
+
+    // --- Mechanical & Aerospace (15) ---
+    { id: 36, title: "Thermal Energy & Thermodynamics", category: "Mechanical", difficulty: "Advanced", provider: "MIT OCW", link: "https://ocw.mit.edu/courses/2-005-thermal-energy-fall-2002/", desc: "Laws of thermodynamics, heat transfer, and energy conversion systems." },
+    { id: 37, title: "Fluid Mechanics", category: "Mechanical", difficulty: "Intermediate", provider: "MIT OCW", link: "#", desc: "Study of fluids at rest and in motion, Navier-Stokes equations." },
+    { id: 38, title: "Introduction to Aerospace Engineering", category: "Aerospace", difficulty: "Intermediate", provider: "MIT OCW", link: "https://ocw.mit.edu/courses/16-00-introduction-to-aerospace-engineering-and-design-spring-2003/", desc: "Flight vehicle design, aerodynamics, and propulsion." },
+    { id: 39, title: "Mechanics of Materials", category: "Mechanical", difficulty: "Intermediate", provider: "Georgia Tech", link: "#", desc: "Stress, strain, and mechanical properties of structural components." },
+    { id: 40, title: "Spacecraft Dynamics and Control", category: "Aerospace", difficulty: "Advanced", provider: "Caltech", link: "#", desc: "Orbital mechanics, attitude dynamics, and spacecraft control systems." },
+    { id: 41, title: "Intro to CAD & 3D Modeling", category: "Mechanical", difficulty: "Beginner", provider: "Autodesk", link: "#", desc: "Learn AutoCAD, SolidWorks, or Fusion 360 basics for engineering design." },
+    { id: 42, title: "Manufacturing Processes", category: "Mechanical", difficulty: "Intermediate", provider: "MIT OCW", link: "#", desc: "Machining, casting, additive manufacturing, and materials selection." },
+    { id: 43, title: "Aerodynamics", category: "Aerospace", difficulty: "Advanced", provider: "TU Delft", link: "#", desc: "Airfoil theory, compressible flow, and wind tunnel testing." },
+    { id: 44, title: "Finite Element Analysis (FEA)", category: "Mechanical", difficulty: "Advanced", provider: "Cornell", link: "#", desc: "Computational methods for solving solid mechanics and heat transfer problems." },
+    { id: 45, title: "Internal Combustion Engines", category: "Mechanical", difficulty: "Advanced", provider: "MIT OCW", link: "#", desc: "Engine cycles, combustion physics, and emission controls." },
+    { id: 46, title: "Rocket Propulsion", category: "Aerospace", difficulty: "Advanced", provider: "MIT OCW", link: "#", desc: "Chemical rockets, nozzle theory, and interplanetary mission design." },
+    { id: 47, title: "Vibration Control", category: "Mechanical", difficulty: "Advanced", provider: "Purdue", link: "#", desc: "Analysis of mechanical vibrations and isolation techniques." },
+    { id: 48, title: "HVAC System Design", category: "Mechanical", difficulty: "Intermediate", provider: "ASHRAE", link: "#", desc: "Heating, ventilation, and air conditioning fundamentals." },
+    { id: 49, title: "Aviation Safety", category: "Aerospace", difficulty: "Intermediate", provider: "Embry-Riddle", link: "#", desc: "Principles of flight safety, crash investigation, and risk management." },
+    { id: 50, title: "Drone Design & Programming", category: "Aerospace", difficulty: "Intermediate", provider: "Udemy", link: "#", desc: "Build and program autonomous UAV quadcopters." },
+
+    // --- Electrical, Electronics & Robotics (20) ---
+    { id: 51, title: "Circuit Analysis & Engineering", category: "Electrical", difficulty: "Intermediate", provider: "Khan Academy", link: "https://www.khanacademy.org/science/electrical-engineering", desc: "Resistors, capacitors, Kirchhoff's laws, and AC/DC circuit analysis." },
+    { id: 52, title: "Circuits and Electronics", category: "Electronics", difficulty: "Advanced", provider: "MITx", link: "https://www.edx.org/learn/electronics", desc: "MOSFETs, op-amps, filters, and analog/digital circuit design." },
+    { id: 53, title: "Robotics Specialization", category: "Robotics", difficulty: "Advanced", provider: "Univ of Pennsylvania", link: "https://www.coursera.org/specializations/robotics", desc: "Kinematics, dynamics, computer vision, and machine learning for robotics." },
+    { id: 54, title: "Digital Signal Processing", category: "Electrical", difficulty: "Advanced", provider: "EPFL", link: "#", desc: "Fourier transforms, Z-transforms, and digital filter design." },
+    { id: 55, title: "Power Electronics", category: "Electrical", difficulty: "Advanced", provider: "Univ of Colorado", link: "#", desc: "Design of switched-mode power converters and motor drives." },
+    { id: 56, title: "Microcontroller Systems (Arduino)", category: "Electronics", difficulty: "Beginner", provider: "UC Irvine", link: "#", desc: "Interfacing sensors and actuators using Arduino C/C++." },
+    { id: 57, title: "Control Systems Engineering", category: "Robotics", difficulty: "Advanced", provider: "MIT OCW", link: "#", desc: "Feedback control, PID, state-space methods, and stability." },
+    { id: 58, title: "FPGA Design with VHDL/Verilog", category: "Electronics", difficulty: "Advanced", provider: "Udemy", link: "#", desc: "Digital logic design implemented on Field Programmable Gate Arrays." },
+    { id: 59, title: "Electromagnetics", category: "Electrical", difficulty: "Advanced", provider: "MIT OCW", link: "#", desc: "Maxwell's equations, wave propagation, antennas, and waveguides." },
+    { id: 60, title: "Introduction to ROS", category: "Robotics", difficulty: "Intermediate", provider: "TU Delft", link: "#", desc: "Robot Operating System (ROS) basics for autonomous navigation." },
+    { id: 61, title: "Semiconductor Physics", category: "Electronics", difficulty: "Advanced", provider: "Purdue", link: "#", desc: "PN junctions, BJT/MOSFET operation, and solid-state physics." },
+    { id: 62, title: "Electric Vehicle Engineering", category: "Electrical", difficulty: "Intermediate", provider: "DelftX", link: "#", desc: "Battery tech, charging infrastructure, and EV drivetrains." },
+    { id: 63, title: "Industrial Robotics", category: "Robotics", difficulty: "Intermediate", provider: "Udemy", link: "#", desc: "Programming industrial arms (KUKA, ABB) and manufacturing automation." },
+    { id: 64, title: "PCB Design with Altium", category: "Electronics", difficulty: "Intermediate", provider: "Udemy", link: "#", desc: "Printed Circuit Board layout, routing, and manufacturing preparation." },
+    { id: 65, title: "Smart Grid Technologies", category: "Electrical", difficulty: "Advanced", provider: "KTH", link: "#", desc: "Renewable integration, microgrids, and intelligent power distribution." },
+    { id: 66, title: "Computer Vision for Robotics", category: "Robotics", difficulty: "Advanced", provider: "Queensland Univ", link: "#", desc: "Visual SLAM, object tracking, and robotic visual servoing." },
+    { id: 67, title: "Analog IC Design", category: "Electronics", difficulty: "Advanced", provider: "Stanford", link: "#", desc: "Design of CMOS analog integrated circuits at the transistor level." },
+    { id: 68, title: "Mechatronics Systems", category: "Robotics", difficulty: "Intermediate", provider: "MIT OCW", link: "#", desc: "Integration of mechanical, electrical, and software engineering." },
+    { id: 69, title: "Renewable Energy Systems", category: "Electrical", difficulty: "Intermediate", provider: "DTU", link: "#", desc: "Solar PV, wind energy, and energy storage technologies." },
+    { id: 70, title: "Internet of Things (IoT)", category: "Electronics", difficulty: "Intermediate", provider: "Stanford", link: "#", desc: "Sensor networks, IoT protocols, and edge computing hardware." },
+
+    // --- Cloud & Cybersecurity (15) ---
+    { id: 71, title: "AWS Cloud Practitioner", category: "Cloud", difficulty: "Beginner", provider: "AWS Training", link: "https://aws.amazon.com/training/", desc: "Fundamental understanding of IT services and their uses in the AWS Cloud." },
+    { id: 72, title: "Offensive & Defensive Security", category: "Cybersecurity", difficulty: "Intermediate", provider: "TryHackMe", link: "https://tryhackme.com/", desc: "Hands-on penetration testing, networking protocols, and defense mechanisms." },
+    { id: 73, title: "Google Cloud Architect", category: "Cloud", difficulty: "Advanced", provider: "Google Cloud", link: "#", desc: "Design and manage robust, scalable cloud architectures on GCP." },
+    { id: 74, title: "Docker & Kubernetes", category: "Cloud", difficulty: "Intermediate", provider: "Udemy", link: "#", desc: "Containerization, orchestration, and microservices deployment." },
+    { id: 75, title: "Ethical Hacking Basics", category: "Cybersecurity", difficulty: "Beginner", provider: "EC-Council", link: "#", desc: "Introduction to vulnerabilities, scanning, and hacking concepts." },
+    { id: 76, title: "Microsoft Azure Fundamentals", category: "Cloud", difficulty: "Beginner", provider: "Microsoft", link: "#", desc: "Core cloud concepts and Azure services, security, and pricing." },
+    { id: 77, title: "Cryptography and Network Security", category: "Cybersecurity", difficulty: "Advanced", provider: "Univ of Maryland", link: "#", desc: "Public key infrastructure, firewalls, VPNs, and secure protocols." },
+    { id: 78, title: "DevOps Engineering", category: "Cloud", difficulty: "Advanced", provider: "Atlassian", link: "#", desc: "CI/CD pipelines, Terraform, Ansible, and infrastructure as code." },
+    { id: 79, title: "Digital Forensics", category: "Cybersecurity", difficulty: "Intermediate", provider: "RIT", link: "#", desc: "Investigate cyber crimes, analyze malware, and recover data." },
+    { id: 80, title: "Serverless Cloud Computing", category: "Cloud", difficulty: "Intermediate", provider: "AWS Training", link: "#", desc: "Build applications using AWS Lambda, API Gateway, and DynamoDB." },
+    { id: 81, title: "Web Application Security", category: "Cybersecurity", difficulty: "Advanced", provider: "Stanford", link: "#", desc: "OWASP Top 10, XSS, CSRF, SQL Injection prevention." },
+    { id: 82, title: "Cloud Security Posture", category: "Cloud", difficulty: "Advanced", provider: "SANS", link: "#", desc: "Securing cloud environments, IAM, and compliance monitoring." },
+    { id: 83, title: "Incident Response", category: "Cybersecurity", difficulty: "Advanced", provider: "IBM", link: "#", desc: "Handling security breaches, threat hunting, and SOC operations." },
+    { id: 84, title: "Terraform Associate", category: "Cloud", difficulty: "Intermediate", provider: "HashiCorp", link: "#", desc: "Automate multi-cloud infrastructure provisioning." },
+    { id: 85, title: "CompTIA Security+", category: "Cybersecurity", difficulty: "Intermediate", provider: "CompTIA", link: "#", desc: "Baseline skills to perform core security functions and pursue an IT security career." },
+
+    // --- Civil & Chemical (15) ---
+    { id: 86, title: "Engineering Mechanics: Statics", category: "Civil", difficulty: "Intermediate", provider: "Georgia Tech", link: "https://www.coursera.org/learn/engineering-mechanics-statics", desc: "Calculate forces in 2D and 3D structures, trusses, and beams." },
+    { id: 87, title: "Structural Engineering Design", category: "Civil", difficulty: "Advanced", provider: "MIT OCW", link: "#", desc: "Design of steel and concrete structures under various loads." },
+    { id: 88, title: "Chemical Reaction Engineering", category: "Chemical", difficulty: "Advanced", provider: "Univ of Michigan", link: "#", desc: "Kinetics, reactor design, and catalysis for chemical processes." },
+    { id: 89, title: "Fluid Transport Processes", category: "Chemical", difficulty: "Intermediate", provider: "MIT OCW", link: "#", desc: "Momentum transfer and fluid dynamics in chemical engineering." },
+    { id: 90, title: "Geotechnical Engineering", category: "Civil", difficulty: "Advanced", provider: "Purdue", link: "#", desc: "Soil mechanics, foundation design, and earth retaining structures." },
+    { id: 91, title: "Environmental Engineering", category: "Civil", difficulty: "Intermediate", provider: "Tsinghua Univ", link: "#", desc: "Water treatment, waste management, and pollution control." },
+    { id: 92, title: "Mass Transfer", category: "Chemical", difficulty: "Advanced", provider: "NPTEL", link: "#", desc: "Distillation, absorption, and separation processes." },
+    { id: 93, title: "Construction Management", category: "Civil", difficulty: "Intermediate", provider: "Columbia Univ", link: "#", desc: "Project planning, scheduling, cost estimation, and BIM." },
+    { id: 94, title: "Process Control & Dynamics", category: "Chemical", difficulty: "Advanced", provider: "UT Austin", link: "#", desc: "Dynamic modeling and control of chemical plants." },
+    { id: 95, title: "Transportation Engineering", category: "Civil", difficulty: "Intermediate", provider: "UC Berkeley", link: "#", desc: "Traffic flow theory, highway design, and transit systems." },
+    { id: 96, title: "Polymer Science", category: "Chemical", difficulty: "Intermediate", provider: "MIT OCW", link: "#", desc: "Synthesis, structure, and physical properties of polymers." },
+    { id: 97, title: "Hydrology & Water Resources", category: "Civil", difficulty: "Intermediate", provider: "Imperial College", link: "#", desc: "Precipitation, runoff analysis, and hydraulic structures." },
+    { id: 98, title: "Thermodynamics for Chemical Engineers", category: "Chemical", difficulty: "Advanced", provider: "Yale", link: "#", desc: "Phase equilibria and thermodynamic properties of mixtures." },
+    { id: 99, title: "Surveying and Spatial Data", category: "Civil", difficulty: "Beginner", provider: "Udemy", link: "#", desc: "GIS basics, leveling, total stations, and topographic mapping." },
+    { id: 100, title: "Biochemical Engineering", category: "Chemical", difficulty: "Advanced", provider: "UCL", link: "#", desc: "Bioreactor design, cell kinetics, and downstream processing." },
+    { id: 101, title: "Sustainable Architecture", category: "Civil", difficulty: "Intermediate", provider: "DelftX", link: "#", desc: "Green building principles, passive design, and energy efficiency." }
+];
+
+// --- CORE LOGIC ---
+const courseGrid = document.getElementById('courseGrid');
+const searchInput = document.getElementById('searchInput');
+const branchFilter = document.getElementById('branchFilter');
+const previewModal = document.getElementById('previewModal');
+const aiModal = document.getElementById('aiModal');
+
+// Render Courses
+function renderCourses(coursesToRender) {
+    courseGrid.innerHTML = '';
+    if (coursesToRender.length === 0) {
+        courseGrid.innerHTML = `<div class="no-results">No courses found matching your criteria. Try different keywords!</div>`;
+        return;
+    }
+
+    coursesToRender.forEach(course => {
+        const card = document.createElement('div');
+        card.className = 'course-card';
+        card.setAttribute('data-category', course.category);
+        card.onclick = () => openCourseModal(course);
+
+        card.innerHTML = `
+            <div class="card-header">
+                <span class="tag">${course.category}</span>
+                <span class="difficulty">${course.difficulty}</span>
+            </div>
+            <h3>${course.title}</h3>
+            <div class="course-meta">
+                <span class="provider">🏫 ${course.provider}</span>
+            </div>
+            <a href="javascript:void(0)" class="course-btn">Preview Course</a>
+        `;
+        courseGrid.appendChild(card);
+    });
+}
+
+// Filter Logic
+function applyFilters() {
+    const searchTerm = searchInput.value.toLowerCase();
+    const branch = branchFilter.value;
+
+    const filtered = courses.filter(course => {
+        const matchesSearch = course.title.toLowerCase().includes(searchTerm) || 
+                              course.desc.toLowerCase().includes(searchTerm) || 
+                              course.provider.toLowerCase().includes(searchTerm);
+        const matchesBranch = branch === 'All' || course.category === branch;
+        return matchesSearch && matchesBranch;
+    });
+
+    renderCourses(filtered);
+}
+
+// Event Listeners
+searchInput.addEventListener('input', applyFilters);
+branchFilter.addEventListener('change', applyFilters);
+
+// --- MODAL LOGIC ---
+function openCourseModal(course) {
+    document.getElementById('modalTag').innerText = course.category;
+    document.getElementById('modalTitle').innerText = course.title;
+    document.getElementById('modalProvider').innerText = `🏫 ${course.provider}`;
+    document.getElementById('modalDifficulty').innerText = `📊 ${course.difficulty} Level`;
+    document.getElementById('modalDesc').innerText = course.desc;
+    document.getElementById('modalLink').href = course.link;
+    
+    // Assign proper category styling to tag
+    const tagElem = document.getElementById('modalTag');
+    const tempCard = document.createElement('div');
+    tempCard.className = 'course-card';
+    tempCard.setAttribute('data-category', course.category);
+    document.body.appendChild(tempCard);
+    const styles = window.getComputedStyle(tempCard);
+    tagElem.style.backgroundColor = styles.getPropertyValue('--tag-bg');
+    tagElem.style.color = styles.getPropertyValue('--tag-color');
+    tagElem.style.borderColor = styles.getPropertyValue('--tag-border');
+    document.body.removeChild(tempCard);
+
+    previewModal.classList.add('active');
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).classList.remove('active');
+}
+
+// --- AI RECOMMENDATION LOGIC ---
+document.getElementById('aiBtn').addEventListener('click', () => {
+    aiModal.classList.add('active');
+    document.getElementById('aiPrompt').value = '';
+    document.getElementById('aiLoading').style.display = 'none';
+});
+
+function processAI() {
+    const prompt = document.getElementById('aiPrompt').value.toLowerCase();
+    const loading = document.getElementById('aiLoading');
+    
+    if(!prompt.trim()) return;
+
+    loading.style.display = 'block';
+    
+    // Simulate API delay
+    setTimeout(() => {
+        // Simple NLP mock: map keywords to course fields
+        const keywords = prompt.split(/\s+/).filter(w => w.length > 2);
+        
+        let recommended = courses.map(course => {
+            let score = 0;
+            const searchString = `${course.title} ${course.desc} ${course.category}`.toLowerCase();
+            keywords.forEach(kw => {
+                if(searchString.includes(kw)) score += 2;
+                if(course.category.toLowerCase().includes(kw)) score += 3;
+            });
+            return { ...course, score };
+        })
+        .filter(c => c.score > 0)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 6); // Top 6 recommendations
+
+        // Fallback if no direct matches
+        if(recommended.length === 0) {
+            // Pick random highly rated/advanced courses
+            const shuffled = [...courses].sort(() => 0.5 - Math.random());
+            recommended = shuffled.slice(0, 6);
+        }
+
+        closeModal('aiModal');
+        
+        // Reset manual filters to show AI results clearly
+        searchInput.value = '';
+        branchFilter.value = 'All';
+        
+        // Change header temporarily to indicate AI results
+        document.querySelector('.page-header h2').innerHTML = '✨ AI Recommended Courses';
+        document.querySelector('.page-header .subtext').innerHTML = `Found ${recommended.length} personalized matches based on your goals.`;
+        
+        renderCourses(recommended);
+        
+    }, 1500);
+}
+
+// Close modals on outside click
+window.addEventListener('click', (e) => {
+    if (e.target === previewModal) closeModal('previewModal');
+    if (e.target === aiModal) closeModal('aiModal');
+});
+
+// Initialize dynamically highlighting navbar
+document.addEventListener('DOMContentLoaded', function() {
+    const currentPage = window.location.pathname.split('/').pop() || 'learn_hub.html';
+    const navLinks = document.querySelectorAll('.nav-links a');
+    
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        const href = link.getAttribute('href');
+        if (href === currentPage || (currentPage === '' && href.includes('st_home.html'))) {
+            link.classList.add('active');
+        }
+    });
+
+    // Initial Render of all 100 courses
+    renderCourses(courses);
+});
+</script>
+
+</body>
+</html>

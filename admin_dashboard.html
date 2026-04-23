@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard - SENTINEL</title>
+<link rel="stylesheet" href="dashboard.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Sidebar -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <i class="fas fa-shield-alt"></i>
+            <h2>SENTINEL</h2>
+        </div>
+        <div class="nav-links">
+            <a href="#" class="active">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="adminstudent.html">
+                <i class="fas fa-users"></i>
+                <span>Students</span>
+            </a>
+            <a href="csv.html">
+                <i class="fas fa-upload"></i>
+                <span>Upload Data</span>
+            </a>
+           
+        </div>
+        <button class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+        </button>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-content">
+                <h1>Administrator Dashboard</h1>
+                <p class="subtitle">AI Academic Sentinel - Real-time monitoring & analytics</p>
+                <div class="user-info" style="margin-top: 10px; font-size: 14px; color: #60a5fa;">
+                    <i class="fas fa-user-shield"></i>
+                    Logged in as: <strong>Teacher</strong> |
+                    Session: <span id="sessionTime">Active</span>
+                </div>
+            </div>
+            <div class="header-stats">
+                <div class="stat-item">
+                    ⏱ Live Monitoring Active
+                </div>
+            </div>
+        </header>
+
+        <!-- CSV Upload Section -->
+        <section class="csv-upload-section">
+            <div class="content-card upload-card">
+                <h4>📄 Upload Student Data</h4>
+                <p>Upload a CSV file to update dashboard analytics and student data
+                   <a href="/csv_upload_helper.html" style="color: #22d3ee; margin-left: 10px;" target="_blank">📖 Help</a>
+                </p>
+                <div class="upload-area" id="uploadArea">
+                    <input type="file" id="csvFileInput" accept=".csv" hidden>
+                    <div class="upload-content">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Click to upload CSV file</p>
+                        <small>Required: Name, Department, Attendance | Optional: ID, City, Semester, Grade (any column order)</small>
+                        <button id="refreshDataBtn" class="refresh-btn" title="Refresh data from uploaded CSV">
+                            <i class="fas fa-sync-alt"></i> Refresh Data
+                        </button>
+                    </div>
+                </div>
+                <div id="uploadStatus" class="upload-status"></div>
+            </div>
+        </section>
+
+        <!-- Metrics Cards -->
+        <section class="metrics-grid">
+            <div class="metric-card total-students">
+                <div class="card-icon">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <div class="card-content">
+                    <h3>2,847</h3>
+                    <p>Total Students</p>
+                </div>
+            </div>
+
+            <div class="metric-card integrity">
+                <div class="card-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="card-content">
+                    <h3>98.5%</h3>
+                    <p>Integrity Score</p>
+                </div>
+            </div>
+
+            <div class="metric-card ai-analysis">
+                <div class="card-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <div class="card-content">
+                    <h3>15</h3>
+                    <p>AI Analysis Running</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Extended Dashboard Content -->
+        <section class="dashboard-content">
+            <div class="content-grid">
+
+                <!-- PERFORMANCE CHART -->
+                <div class="content-card">
+                    <h4>📊 Student Performance</h4>
+                    <canvas id="performanceChart"></canvas>
+                </div>
+
+                <!-- AI INSIGHTS -->
+                <div class="content-card">
+                    <h4>🧠 AI Insights</h4>
+                    <div id="aiInsights">
+                        <p>Analyzing student data...</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Existing Dashboard Content -->
+        <section class="dashboard-content">
+            <div class="content-grid">
+
+                <!-- Recent Activity -->
+                <div class="content-card activity-card">
+                    <div class="card-header">
+                        <h4>
+                            <i class="fas fa-history"></i>
+                            Recent Activity
+                        </h4>
+                    </div>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p>New student enrolled</p>
+                                <span class="activity-time">7 hours ago</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-flag"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p>Academic integrity alert</p>
+                                <span class="activity-time">3 hours ago</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-upload"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p>Data upload completed</p>
+                                <span class="activity-time">12 hours ago</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p>Monthly report generated</p>
+                                <span class="activity-time">2 hours ago</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-cog"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p>System maintenance</p>
+                                <span class="activity-time">8 hours ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System Status -->
+                <div class="content-card status-card">
+                    <div class="card-header">
+                        <h4>
+                            <i class="fas fa-server"></i>
+                            System Status
+                        </h4>
+                    </div>
+                    <div class="status-list">
+                        <div class="status-item">
+                            <div class="status-info">
+                                <i class="fas fa-brain"></i>
+                                <span>AI Engine</span>
+                            </div>
+                            <span class="status-badge operational">Operational</span>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-info">
+                                <i class="fas fa-database"></i>
+                                <span>Database</span>
+                            </div>
+                            <span class="status-badge optimal">Optimal</span>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-info">
+                                <i class="fas fa-list-check"></i>
+                                <span>Analysis Queue</span>
+                            </div>
+                            <span class="status-badge running">Running</span>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-info">
+                                <i class="fas fa-network-wired"></i>
+                                <span>API Gateway</span>
+                            </div>
+                            <span class="status-badge active">Active</span>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-info">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Security Systems</span>
+                            </div>
+                            <span class="status-badge secure">Secure</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<script>
+// Authentication check
+function checkAuthentication() {
+    const isAuthenticated = sessionStorage.getItem('authenticated');
+    const userRole = sessionStorage.getItem('userRole');
+    const loginTime = sessionStorage.getItem('loginTime');
+
+    console.log('Checking authentication:', { isAuthenticated, userRole, loginTime });
+
+    if (!isAuthenticated || !userRole || userRole !== 'Teacher') {
+        console.log('Authentication failed, redirecting to main dashboard');
+        alert('Access denied. Please log in as a teacher first.');
+        window.location.href = 'dashboard.html';
+        return false;
+    }
+
+    // Check if login is not too old (24 hours)
+    if (loginTime) {
+        const loginDate = new Date(loginTime);
+        const now = new Date();
+        const hoursDiff = (now - loginDate) / (1000 * 60 * 60);
+
+        if (hoursDiff > 24) {
+            console.log('Login session expired');
+            sessionStorage.clear();
+            alert('Your session has expired. Please log in again.');
+            window.location.href = 'dashboard.html';
+            return false;
+        }
+    }
+
+    console.log('Authentication successful');
+    return true;
+}
+
+// Enhanced logout function
+function logout() {
+    if (confirm('Are you sure you want to log out?')) {
+        sessionStorage.clear();
+        alert('You have been logged out successfully.');
+        window.location.href = 'dashboard.html';
+    }
+}
+
+// Update session time display
+function updateSessionTime() {
+    const loginTime = sessionStorage.getItem('loginTime');
+    if (loginTime) {
+        const loginDate = new Date(loginTime);
+        const now = new Date();
+        const hoursDiff = Math.floor((now - loginDate) / (1000 * 60 * 60));
+        const minutesDiff = Math.floor(((now - loginDate) % (1000 * 60 * 60)) / (1000 * 60));
+
+        const sessionTimeEl = document.getElementById('sessionTime');
+        if (sessionTimeEl) {
+            sessionTimeEl.textContent = `${hoursDiff}h ${minutesDiff}m ago`;
+        }
+    }
+}
+
+// CSV Upload and Data Processing
+let studentData = [];
+
+// Initialize dashboard
+document.addEventListener('DOMContentLoaded', function() {
+    if (!checkAuthentication()) {
+        return; // Don't proceed if not authenticated
+    }
+
+    // Update session time
+    updateSessionTime();
+
+    // Update logout button to use enhanced logout
+    const logoutBtn = document.querySelector('.logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            logout();
+        });
+    }
+
+    // Initialize CSV upload
+    initializeCSVUpload();
+
+    // Load existing CSV data if available
+    loadExistingCSVData();
+
+    // Initialize charts
+    initializeCharts();
+});
+
+// Initialize CSV upload functionality
+function initializeCSVUpload() {
+    const uploadArea = document.getElementById('uploadArea');
+    const csvFileInput = document.getElementById('csvFileInput');
+    const refreshBtn = document.getElementById('refreshDataBtn');
+
+    uploadArea.addEventListener('click', () => {
+        csvFileInput.click();
+    });
+
+    csvFileInput.addEventListener('change', handleCSVUpload);
+
+    // Add refresh button functionality
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent triggering file upload
+            loadExistingCSVData();
+            showUploadStatus('Data refreshed from uploaded CSV!', 'success');
+        });
+    }
+}
+
+// Handle CSV file upload
+function handleCSVUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (!file.name.endsWith('.csv')) {
+        showUploadStatus('Please upload a CSV file only.', 'error');
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const csvText = e.target.result;
+        processCSVData(csvText);
+    };
+
+    reader.onerror = function() {
+        showUploadStatus('Error reading file. Please try again.', 'error');
+    };
+
+    reader.readAsText(file);
+}
+
+// Process CSV data
+function processCSVData(csvText) {
+    try {
+        // Split by newline and filter out empty rows
+        let rows = csvText.trim().split('\n').map(row => row.trim()).filter(row => row.length > 0);
+        
+        console.log('CSV Processing:');
+        console.log('Total rows after split:', rows.length);
+        console.log('First few rows:', rows.slice(0, 3));
+        
+        if (rows.length < 1) {
+            showUploadStatus('CSV file is empty. Please add at least a header row and one data row.', 'error');
+            return;
+        }
+
+        // Parse header row to find column positions
+        const headerRow = rows[0];
+        const headers = parseCSVRow(headerRow).map(h => h.trim().toLowerCase());
+        
+        console.log('Headers found:', headers);
+        
+        // Map header names to column indices
+        const columnMap = {
+            id: headers.findIndex(h => h === 'id'),
+            name: headers.findIndex(h => h === 'name'),
+            department: headers.findIndex(h => h === 'department'),
+            attendance: headers.findIndex(h => h === 'attendance'),
+            city: headers.findIndex(h => h === 'city'),
+            semester: headers.findIndex(h => h === 'semester'),
+            grade: headers.findIndex(h => h === 'grade')
+        };
+        
+        console.log('Column mapping:', columnMap);
+        
+        // Validate that we have the required columns
+        if (columnMap.name === -1 || columnMap.department === -1 || columnMap.attendance === -1) {
+            showUploadStatus('❌ CSV must contain at least: Name, Department, and Attendance columns.', 'error');
+            return;
+        }
+
+        // Skip header row and process data rows
+        const dataRows = rows.slice(1).filter(row => row.length > 0);
+        
+        if (dataRows.length === 0) {
+            showUploadStatus('❌ CSV file must contain at least a header row and one data row. You provided a header but no data rows.', 'error');
+            return;
+        }
+
+        studentData = dataRows.map((row, index) => {
+            const cols = parseCSVRow(row);
+            
+            // Extract values using column mapping
+            const name = (columnMap.name >= 0 ? cols[columnMap.name] : null)?.trim() || `Student ${index + 1}`;
+            const department = (columnMap.department >= 0 ? cols[columnMap.department] : null)?.trim() || 'N/A';
+            const attendanceStr = (columnMap.attendance >= 0 ? cols[columnMap.attendance] : null)?.replace('%', '').trim();
+            const attendance = parseFloat(attendanceStr) || 0;
+            const city = (columnMap.city >= 0 ? cols[columnMap.city] : null)?.trim() || 'N/A';
+            const semester = (columnMap.semester >= 0 ? cols[columnMap.semester] : null)?.trim() || 'N/A';
+            const grade = (columnMap.grade >= 0 ? cols[columnMap.grade] : null)?.trim() || 'N/A';
+            
+            if (!name || !department) {
+                console.warn(`Row ${index + 1} skipped - missing required data (Name or Department)`, {name, department});
+                return null;
+            }
+
+            return {
+                name,
+                department,
+                attendance,
+                city,
+                semester,
+                grade
+            };
+        }).filter(student => student !== null);
+
+        if (studentData.length === 0) {
+            showUploadStatus('❌ No valid student data found in CSV. Check that each row has at least: Name, Department, Attendance.', 'error');
+            return;
+        }
+
+        console.log(`✓ Successfully parsed ${studentData.length} students from CSV`);
+
+        // Store data in sessionStorage (both keys for compatibility)
+        sessionStorage.setItem('dashboardCSVData', JSON.stringify(studentData));
+        sessionStorage.setItem('csvData', JSON.stringify(studentData)); // For adminstudent.html compatibility
+        
+        // Also store in localStorage so students can access it when logging in directly
+        localStorage.setItem('dashboardCSVData', JSON.stringify(studentData));
+        localStorage.setItem('csvData', JSON.stringify(studentData));
+
+        // Update dashboard
+        updateDashboardWithData();
+
+        showUploadStatus(`Successfully loaded ${studentData.length} student records!`, 'success');
+
+    } catch (error) {
+        console.error('Error processing CSV:', error);
+        showUploadStatus('Error processing CSV file. Please check the format.', 'error');
+    }
+}
+
+// Parse CSV row (handles quoted fields)
+function parseCSVRow(row) {
+    const result = [];
+    let current = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < row.length; i++) {
+        const char = row[i];
+
+        if (char === '"') {
+            inQuotes = !inQuotes;
+        } else if (char === ',' && !inQuotes) {
+            result.push(current.trim());
+            current = '';
+        } else {
+            current += char;
+        }
+    }
+
+    result.push(current.trim());
+    return result;
+}
+
+// Load existing CSV data from sessionStorage
+function loadExistingCSVData() {
+    const savedDataSession = sessionStorage.getItem('dashboardCSVData');
+    const savedDataLocal = localStorage.getItem('dashboardCSVData');
+    const savedData = savedDataSession || savedDataLocal;
+    
+    if (savedData) {
+        try {
+            studentData = JSON.parse(savedData);
+            // Ensure data is in both storages
+            sessionStorage.setItem('dashboardCSVData', savedData);
+            sessionStorage.setItem('csvData', savedData);
+            localStorage.setItem('dashboardCSVData', savedData);
+            localStorage.setItem('csvData', savedData);
+            updateDashboardWithData();
+        } catch (error) {
+            console.error('Error loading saved CSV data:', error);
+        }
+    }
+}
+
+// Update dashboard with CSV data
+function updateDashboardWithData() {
+    if (studentData.length === 0) return;
+
+    // Update metrics cards
+    updateMetricsCards();
+
+    // Update performance chart
+    updatePerformanceChart();
+
+    // Update AI insights
+    updateAIInsights();
+}
+
+// Update metrics cards with real data
+function updateMetricsCards() {
+    const totalStudents = studentData.length;
+    const avgAttendance = studentData.reduce((sum, student) => sum + student.attendance, 0) / totalStudents;
+    const highRiskCount = studentData.filter(student => student.attendance < 50).length;
+
+    // Update total students
+    const totalStudentsEl = document.querySelector('.total-students h3');
+    if (totalStudentsEl) {
+        totalStudentsEl.textContent = totalStudents.toLocaleString();
+    }
+
+    // Update integrity score (based on attendance)
+    const integrityEl = document.querySelector('.integrity h3');
+    if (integrityEl) {
+        const integrityScore = Math.max(0, Math.min(100, avgAttendance + 20)); // Add buffer for other factors
+        integrityEl.textContent = integrityScore.toFixed(1) + '%';
+    }
+
+    // Update AI analysis count (simulated based on data size)
+    const aiAnalysisEl = document.querySelector('.ai-analysis h3');
+    if (aiAnalysisEl) {
+        aiAnalysisEl.textContent = Math.min(totalStudents, 50); // Cap at 50 for display
+    }
+}
+
+// Update performance chart
+function updatePerformanceChart() {
+    const ctx = document.getElementById('performanceChart');
+    if (!ctx) return;
+
+    // Calculate department-wise performance
+    const departmentStats = {};
+    studentData.forEach(student => {
+        if (!departmentStats[student.department]) {
+            departmentStats[student.department] = { count: 0, totalAttendance: 0 };
+        }
+        departmentStats[student.department].count++;
+        departmentStats[student.department].totalAttendance += student.attendance;
+    });
+
+    const departments = Object.keys(departmentStats);
+    const avgAttendance = departments.map(dept => 
+        departmentStats[dept].totalAttendance / departmentStats[dept].count
+    );
+
+    // Destroy existing chart if it exists
+    if (window.performanceChartInstance) {
+        window.performanceChartInstance.destroy();
+    }
+
+    window.performanceChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: departments,
+            datasets: [{
+                label: 'Average Attendance (%)',
+                data: avgAttendance,
+                backgroundColor: 'rgba(34, 211, 238, 0.6)',
+                borderColor: 'rgba(34, 211, 238, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+}
+
+// Update AI insights
+function updateAIInsights() {
+    const insightsEl = document.getElementById('aiInsights');
+    if (!insightsEl) return;
+
+    const totalStudents = studentData.length;
+    const avgAttendance = studentData.reduce((sum, student) => sum + student.attendance, 0) / totalStudents;
+    const highRiskCount = studentData.filter(student => student.attendance < 50).length;
+    const lowRiskCount = studentData.filter(student => student.attendance >= 75).length;
+
+    const insights = `
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+            <div style="background: rgba(34, 197, 94, 0.1); padding: 15px; border-radius: 8px; border-left: 4px solid #22c55e;">
+                <h5 style="color: #22c55e; margin: 0 0 5px 0;">✅ Strong Performers</h5>
+                <p style="margin: 0; font-size: 14px;">${lowRiskCount} students with ≥75% attendance</p>
+            </div>
+            <div style="background: rgba(239, 68, 68, 0.1); padding: 15px; border-radius: 8px; border-left: 4px solid #ef4444;">
+                <h5 style="color: #ef4444; margin: 0 0 5px 0;">⚠️ High Risk</h5>
+                <p style="margin: 0; font-size: 14px;">${highRiskCount} students with <50% attendance</p>
+            </div>
+        </div>
+        <div style="margin-top: 15px; padding: 15px; background: rgba(34, 211, 238, 0.1); border-radius: 8px;">
+            <h5 style="color: #22d3ee; margin: 0 0 10px 0;">📊 Overall Statistics</h5>
+            <p style="margin: 0; font-size: 14px; line-height: 1.6;">
+                • Total Students: <strong>${totalStudents}</strong><br>
+                • Average Attendance: <strong>${avgAttendance.toFixed(1)}%</strong><br>
+                • Departments: <strong>${new Set(studentData.map(s => s.department)).size}</strong><br>
+                • Cities: <strong>${new Set(studentData.map(s => s.city)).size}</strong>
+            </p>
+        </div>
+    `;
+
+    insightsEl.innerHTML = insights;
+}
+
+// Show upload status
+function showUploadStatus(message, type) {
+    const statusEl = document.getElementById('uploadStatus');
+    
+    // Add help link for error messages
+    let displayMessage = message;
+    if (type === 'error' && message.includes('CSV')) {
+        displayMessage = message + ' <a href="/csv_upload_helper.html" target="_blank" style="color: #22d3ee; text-decoration: underline; margin-left: 10px;">📖 View Help</a>';
+    }
+    
+    statusEl.innerHTML = displayMessage;
+    statusEl.className = `upload-status ${type}`;
+    statusEl.style.display = 'block';
+
+    // Hide after 8 seconds for errors, 5 for success
+    const timeout = type === 'error' ? 8000 : 5000;
+    setTimeout(() => {
+        statusEl.style.display = 'none';
+    }, timeout);
+}
+
+// Initialize charts on page load
+function initializeCharts() {
+    // Create default chart if no data is loaded
+    if (studentData.length === 0) {
+        const ctx = document.getElementById('performanceChart');
+        if (ctx) {
+            window.performanceChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['No Data'],
+                    datasets: [{
+                        label: 'Average Attendance (%)',
+                        data: [0],
+                        backgroundColor: 'rgba(148, 163, 184, 0.3)',
+                        borderColor: 'rgba(148, 163, 184, 0.5)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+    }
+}
+
+// Prevent access via direct URL manipulation
+window.addEventListener('load', function() {
+    // Double-check authentication after page loads
+    if (!checkAuthentication()) {
+        return;
+    }
+});
+</script>
+
+</body>
+</html>

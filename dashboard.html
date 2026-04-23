@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartEdu AI</title>
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #020617, #0f172a);
+    color: #fff;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 60px;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: 600;
+    color: #60a5fa;
+}
+
+.btn {
+    background: #4f46e5;
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: #6366f1;
+}
+
+/* Hero Section */
+.hero {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.badge {
+    display: inline-block;
+    background: rgba(99,102,241,0.2);
+    color: #a5b4fc;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    margin-bottom: 20px;
+}
+
+.hero h1 {
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.gradient-text {
+    background: linear-gradient(90deg, #6366f1, #22d3ee);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+    margin-top: 20px;
+    color: #94a3b8;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.launch-btn {
+    margin-top: 30px;
+    padding: 14px 26px;
+    font-size: 16px;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #6366f1, #22d3ee);
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.launch-btn:hover {
+    transform: scale(1.05);
+}
+
+/* Cards */
+.cards {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 60px 20px;
+    flex-wrap: wrap;
+}
+
+.card {
+    background: rgba(255,255,255,0.05);
+    padding: 30px;
+    border-radius: 20px;
+    width: 280px;
+    transition: 0.3s;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    background: rgba(255,255,255,0.08);
+}
+
+.card h3 {
+    margin-top: 15px;
+}
+
+.card p {
+    margin-top: 10px;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+/* Icon */
+.icon {
+    font-size: 24px;
+    background: rgba(99,102,241,0.2);
+    padding: 10px;
+    border-radius: 10px;
+    display: inline-block;
+}
+
+/* Overlay Background Blur */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(2, 6, 23, 0.75);
+    backdrop-filter: blur(10px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+/* Modal Box */
+.modal {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 40px;
+    border-radius: 20px;
+    width: 400px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 0 40px rgba(99,102,241,0.2);
+}
+
+/* Title */
+.modal h2 {
+    color: #818cf8;
+    margin-bottom: 10px;
+}
+
+.modal p {
+    color: #94a3b8;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+/* Role Cards */
+.roles {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.role-card {
+    flex: 1;
+    padding: 20px;
+    border-radius: 15px;
+    cursor: pointer;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: 0.3s;
+}
+
+.role-card:hover {
+    background: rgba(99,102,241,0.15);
+    transform: translateY(-5px);
+}
+
+/* Role Card Icon */
+.role-card .icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+    background: none;
+    padding: 0;
+}
+
+.role-card span {
+    font-size: 14px;
+    color: #cbd5f5;
+    display: block;
+}
+
+/* Active Role */
+.role-card.active {
+    border: 1px solid #7c3aed;
+    background: rgba(124,58,237,0.2);
+}
+
+/* Form */
+.form {
+    text-align: left;
+    display: none;
+    margin-top: 20px;
+}
+
+.form.show {
+    display: block;
+}
+
+.form label {
+    font-size: 13px;
+    color: #cbd5f5;
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+.form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(255,255,255,0.08);
+    color: white;
+    font-size: 14px;
+}
+
+.form input::placeholder {
+    color: #64748b;
+}
+
+.form input:focus {
+    outline: none;
+    background: rgba(255,255,255,0.12);
+    box-shadow: 0 0 0 2px rgba(124,58,237,0.3);
+}
+
+/* ===== VERIFICATION CODE ===== */
+#verificationGroup {
+    display: none;
+}
+
+#verificationGroup.show {
+    display: block;
+}
+
+#verificationGroup label {
+    display: block;
+    font-size: 13px;
+    color: #cbd5f5;
+    margin-bottom: 8px;
+    margin-top: 15px;
+}
+
+#verificationGroup input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(255,255,255,0.05);
+    color: white;
+    outline: none;
+}
+
+/* Login Button */
+#loginBtn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    font-weight: 500;
+    cursor: pointer;
+    background: linear-gradient(90deg, #7c3aed, #22d3ee);
+    color: white;
+    transition: 0.3s;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+#loginBtn:hover {
+    transform: scale(1.02);
+}
+</style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+<div class="navbar">
+    <div class="logo">🧠 SmartEdu AI</div>
+</div>
+
+<!-- Hero -->
+<section class="hero">
+    <div class="badge">AI-Powered Education Platform</div>
+
+    <h1>
+        Smart <span class="gradient-text">AI Education</span><br>
+        Platform
+    </h1>
+
+    <p>
+        Empowering teachers, students, and parents with AI-driven analytics,
+        personalized learning, and real-time risk assessment.
+    </p>
+
+    <button class="launch-btn" onclick="launchDashboard()">
+        Get Started →
+    </button>
+</section>
+
+<!-- Cards -->
+<section class="cards">
+
+    <div class="card">
+        <div class="icon">📊</div>
+        <h3>Risk Analytics</h3>
+        <p>AI-powered student risk analysis with actionable insights for teachers.</p>
+    </div>
+
+    <div class="card">
+        <div class="icon">📚</div>
+        <h3>Smart Learning</h3>
+        <p>Personalized AI tutor, adaptive content, and career guidance for students.</p>
+    </div>
+
+    <div class="card">
+        <div class="icon">🛡️</div>
+        <h3>Parent Monitoring</h3>
+        <p>Real-time updates on attendance, performance, and learning activity.</p>
+    </div>
+
+</section>
+
+<!-- Login Modal -->
+<div class="overlay" id="loginModal">
+  <div class="modal">
+    <h2>Welcome Back</h2>
+    <p>Choose your role and sign in to continue</p>
+
+    <div class="roles">
+      <div class="role-card" onclick="selectRole(this, 'Teacher')">
+        <div class="icon">👨‍🏫</div>
+        <span>Teacher</span>
+      </div>
+
+      <div class="role-card" onclick="selectRole(this, 'Student')">
+        <div class="icon">🎓</div>
+        <span>Student</span>
+      </div>
+
+      <div class="role-card" onclick="selectRole(this, 'Parent')">
+        <div class="icon">🛡️</div>
+        <span>Parent</span>
+      </div>
+    </div>
+
+    <div class="form" id="loginForm">
+      <label for="email">Email Address</label>
+      <input type="email" id="email" placeholder="Enter your email" required>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Enter your password" required>
+
+      <div id="verificationGroup">
+        <label for="verificationCode">6-Digit Verification Code</label>
+        <input type="number" id="verificationCode" placeholder="Enter verification code" maxlength="6" min="0" max="999999">
+      </div>
+
+      <button id="loginBtn">Sign In as Teacher</button>
+      <p style="margin-top:12px; font-size:14px; color:#cbd5f5; text-align:center;">Don't have an account? <a href="createnewaccount.html" style="color:#22d3ee; text-decoration:none;">Create Account</a></p>
+    </div>
+  </div>
+</div>
+
+<script>
+let selectedRole = "Teacher";
+
+function launchDashboard() {
+    document.getElementById("loginModal").style.display = "flex";
+}
+
+function selectRole(element, role) {
+    selectedRole = role;
+
+    // Remove active from all role cards
+    document.querySelectorAll(".role-card").forEach(card => {
+        card.classList.remove("active");
+    });
+
+    // Add active to selected card
+    element.classList.add("active");
+
+    // Show login form
+    document.getElementById("loginForm").classList.add("show");
+
+    // Update button text
+    document.getElementById("loginBtn").innerText = "Sign In as " + role;
+    
+    // Show verification code field only for Student and Parent
+    const verificationGroup = document.getElementById("verificationGroup");
+    if(role === "Student" || role === "Parent"){
+        verificationGroup.classList.add("show");
+    } else {
+        verificationGroup.classList.remove("show");
+    }
+}
+
+// Login action
+document.getElementById("loginBtn").addEventListener("click", () => {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const verificationCode = document.getElementById("verificationCode").value;
+
+    if (!email || !password) {
+        alert("Please fill in all fields");
+        return;
+    }
+
+    // VALIDATE 6-DIGIT CODE ONLY FOR STUDENT AND PARENT
+    if(selectedRole === "Student" || selectedRole === "Parent"){
+        if(!verificationCode){
+            alert("Please enter your 6-digit verification code!");
+            return;
+        }
+        if(verificationCode.length !== 6 || isNaN(verificationCode)){
+            alert("Verification code must be exactly 6 digits!");
+            return;
+        }
+
+        // VERIFY CODE AGAINST STORED ACCOUNT DATA
+        const storedUser = JSON.parse(localStorage.getItem("user"));
+        
+        if(!storedUser || storedUser.email !== email || storedUser.role !== selectedRole){
+            alert("Account not found! Please create an account first.");
+            return;
+        }
+
+        if(storedUser.verificationCode !== verificationCode){
+            alert("❌ Verification code is incorrect! Please try again.");
+            return;
+        }
+    }
+
+    alert("Logging in as " + selectedRole);
+
+    // Redirect based on selected role
+    if (selectedRole === "Teacher") {
+        // Store authentication status
+        sessionStorage.setItem('authenticated', 'true');
+        sessionStorage.setItem('userRole', 'Teacher');
+        sessionStorage.setItem('loginTime', new Date().toISOString());
+        window.location.href = "admin_dashboard.html";
+    } else if (selectedRole === "Student") {
+        sessionStorage.setItem('authenticated', 'true');
+        sessionStorage.setItem('userRole', 'Student');
+        sessionStorage.setItem('loginTime', new Date().toISOString());
+        window.location.href = "st_home.html";
+    } else if (selectedRole === "Parent") {
+        sessionStorage.setItem('authenticated', 'true');
+        sessionStorage.setItem('userRole', 'Parent');
+        sessionStorage.setItem('loginTime', new Date().toISOString());
+        window.location.href = "parent.html";
+    }
+});
+
+// Close modal when clicking outside
+document.addEventListener('click', function(event) {
+    var loginModal = document.getElementById('loginModal');
+    if (event.target === loginModal) {
+        loginModal.style.display = 'none';
+        // Reset form
+        document.getElementById("loginForm").classList.remove("show");
+        document.getElementById("email").value = "";
+        document.getElementById("password").value = "";
+        document.querySelectorAll(".role-card").forEach(card => {
+            card.classList.remove("active");
+        });
+    }
+});
+</script>
+
+</body>
+</html>
